@@ -60,6 +60,8 @@ float oldY = 0;
 
 int bullets = 0;
 
+int ammo = 100;
+
 std::vector<float> tangent(1203);
 
 glm::vec3 lightDir = glm::normalize(glm::vec3(1.0f, -0.9f, -1.0f));
@@ -523,12 +525,34 @@ void renderScene()
 		glLoadIdentity();
 		//renderBitmapString(100, 100, (void *)font, "Coins: ");
 		std::stringstream ss;
+		std::stringstream sss;
+		if (coins.size() > 0 && ammo == 0) {
+			ss << "You lost";
+			std::string s = ss.str();
+			const char * c = s.c_str();
+			renderBitmapString(500, 500, (void *)font, c);
+		}
+		else if (coins.size() > 0){
 		ss << "Coins: " << 10-coins.size() << "/" << 10;
 		std::string s = ss.str();
 		const char * c = s.c_str();
 		renderBitmapString(100, 100, (void *)font, c);
+		sss << "Ammo : " << ammo;
+		s = sss.str();
+		c = s.c_str();
+		renderBitmapString(100, 130, (void *)font, c);
+		}
+		else {
+			ss << "You won!";
+			std::string s = ss.str();
+			const char * c = s.c_str();
+			renderBitmapString(500, 500, (void *)font, c);
+		}
 		glPopMatrix();
 		resetPerspectiveProjection();
+
+		
+
 
 
 		// Macierz statku "przyczepia" go do kamery. Warto przeanalizowac te linijke i zrozumiec jak to dziala.
@@ -557,20 +581,22 @@ void renderScene()
 		}
 		for (int i = 0; i < shoots.size(); i++)
 		{	
-			shoots[i] = shoots[i] * glm::translate(glm::vec3(0, 0, 100.0f));
+			shoots[i] = shoots[i] * glm::translate(glm::vec3(0, 0, 10.0f));
 			//glm::mat4 coinModelMatrix = glm::translate(shoots[i]) * glm::translate(glm::vec3(0, 0, 0)) * glm::scale(glm::vec3(0.001f));
 			float d = find_distance(shoots[i][3], mainShipPosition + glm::vec3(0, -2.5, 0));
 			if (d > 20)
 				shoots.erase(std::find(shoots.begin(), shoots.end(), shoots[i]));
 			else
-				drawObjectColor(&coinModel, shoots[i], glm::vec3(1.0f, 1.0f, 0.0f));
+				drawObjectColor(&sphereModel, shoots[i], glm::vec3(1.0f, 1.0f, 1.0f));
 		}
 
 		if (bullets > 0) {
-			mainShipPosition.x += 0.10;
-			glm::mat4 position = glm::translate(mainShipPosition) * glm::rotate(-cameraAngle + glm::radians(180.0f), glm::vec3(0, 1, 0)) * glm::scale(glm::vec3(0.005f));
-
+			//mainShipPosition.x += 0.10;
+			if (ammo>0){
+			glm::mat4 position = glm::translate(mainShipPosition) * glm::rotate(-cameraAngle + glm::radians(180.0f), glm::vec3(0, 1, 0)) * glm::scale(glm::vec3(0.05f));
 			shoots.push_back(position);
+			ammo--;
+			}
 			bullets--;
 		}
 
@@ -794,7 +820,7 @@ int main(int argc, char ** argv)
 	glutInitWindowPosition(200, 200);
 	glutInitWindowSize(1024, 1024);
 	glutInitDisplayMode(GLUT_DEPTH | GLUT_DOUBLE | GLUT_RGBA);
-	glutCreateWindow("Niezwykle zaawansowana symulacja graficzna");
+	glutCreateWindow("CPG");
 	glutReshapeFunc(resize);
 	glewInit();
 
@@ -810,14 +836,6 @@ int main(int argc, char ** argv)
 
 	return 0;
 
-
 }
-//	glutInit(&argc, argv);
-//	glutInitWindowSize(640, 480);
-//	glutInitWindowPosition(10, 10);
-//	glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE | GLUT_DEPTH);     glutCreateWindow("Font Rendering Using Bitmap Font - Programming Techniques0");     glutReshapeFunc(resize);
-//	glutDisplayFunc(renderScene);
-//	glutTimerFunc(25, update, 0);    
-//	glutMainLoop();
-//	return EXIT_SUCCESS;
+
 
