@@ -102,7 +102,7 @@ GLuint textureAsteroid, xpos, xneg, ypos, yneg, zpos, zneg;
 GLuint cubemapTexture;
 
 std::vector<glm::vec4> planets;
-std::vector<glm::vec3> coins;
+std::vector<glm::vec3> darkPlanets;
 std::vector<glm::mat4> shoots;
 glm::vec3 points[220];
 
@@ -523,17 +523,17 @@ void renderScene()
 		setOrthographicProjection();
 		glPushMatrix();
 		glLoadIdentity();
-		//renderBitmapString(100, 100, (void *)font, "Coins: ");
+		//renderBitmapString(100, 100, (void *)font, "darkPlanets: ");
 		std::stringstream ss;
 		std::stringstream sss;
-		if (coins.size() > 0 && ammo == 0) {
+		if (darkPlanets.size() > 0 && ammo == 0) {
 			ss << "You lost";
 			std::string s = ss.str();
 			const char * c = s.c_str();
 			renderBitmapString(500, 500, (void *)font, c);
 		}
-		else if (coins.size() > 0){
-		ss << "Coins: " << 10-coins.size() << "/" << 10;
+		else if (darkPlanets.size() > 0){
+		ss << "Dark planets: " << 10-darkPlanets.size() << "/" << 10;
 		std::string s = ss.str();
 		const char * c = s.c_str();
 		renderBitmapString(100, 100, (void *)font, c);
@@ -568,16 +568,16 @@ void renderScene()
 		//Sleep(50);
 
 		//dodanie naszych monetek
-		for (int i = 0; i < coins.size(); i++)
+		for (int i = 0; i < darkPlanets.size(); i++)
 		{
-			glm::mat4 coinModelMatrix = glm::translate(coins[i]) * createRotationMatrix(time / 2) * glm::translate(glm::vec3(-3, 0, 0)) * glm::scale(glm::vec3(0.10f));
+			glm::mat4 darkPlanetModelMatrix = glm::translate(darkPlanets[i]) * createRotationMatrix(time / 2) * glm::translate(glm::vec3(0, 0, 0)) * glm::scale(glm::vec3(0.50f));
 			for (int j = 0; j < shoots.size(); j++) {
 				glm::vec3 bulletPosition = shoots[j][3];
-				float d = find_distance(coins[i], bulletPosition + glm::vec3(0, -2.5, 0));
+				float d = find_distance(darkPlanets[i], bulletPosition + glm::vec3(0, 0, 0));
 				if (d < 1)
-					coins.erase(std::find(coins.begin(), coins.end(), coins[i]));
+					darkPlanets.erase(std::find(darkPlanets.begin(), darkPlanets.end(), darkPlanets[i]));
 			}
-			drawObjectColor(&coinModel, coinModelMatrix, glm::vec3(1.0f, 1.0f, 0.0f));
+			drawObjectColor(&sphereModel, darkPlanetModelMatrix, glm::vec3(0.0f, 0.0f, 0.0f));
 		}
 		for (int i = 0; i < shoots.size(); i++)
 		{	
@@ -680,21 +680,6 @@ void renderScene()
 		}
 		drawSkybox(cubeMapID);
 
-		//collision detection
-		float dp = find_distance(planetPosition, mainShipPosition);
-		float ds = find_distance(ship_pos, mainShipPosition);
-		if (dp < 4 || ds < 2)
-			state = false;
-		for (int i = 0; i < spaceships.size(); i++) {
-			float dss = find_distance(spaceships[i].pos, mainShipPosition);
-			if (dss < 1)
-				state = false;
-		}
-		for (int i = 0; i < 3; i++) {
-			float dps = find_distance(planets[i], mainShipPosition);
-			if (dps < 2)
-				state = false;
-		}
 
 	glutSwapBuffers();
 }
@@ -767,7 +752,7 @@ void init()
 			position = glm::vec3(xpos, ypos, zpos);
 			d = find_distance(glm::vec3(-1, 2, -1), position);
 		}
-		coins.push_back(position);
+		darkPlanets.push_back(position);
 	}
 
 	
