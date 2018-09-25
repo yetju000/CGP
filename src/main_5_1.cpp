@@ -31,7 +31,6 @@ int cubeMapID;
 
 obj::Model shipModel;
 obj::Model sphereModel;
-obj::Model renderModel;
 obj::Model coinModel;
 
 GLuint depthTexture;
@@ -533,7 +532,7 @@ void renderScene()
 			renderBitmapString(500, 500, (void *)font, c);
 		}
 		else if (darkPlanets.size() > 0){
-		ss << "Dark planets: " << 10-darkPlanets.size() << "/" << 10;
+		ss << "White planets: " << 10-darkPlanets.size() << "/" << 10;
 		std::string s = ss.str();
 		const char * c = s.c_str();
 		renderBitmapString(100, 100, (void *)font, c);
@@ -577,7 +576,7 @@ void renderScene()
 				if (d < 1)
 					darkPlanets.erase(std::find(darkPlanets.begin(), darkPlanets.end(), darkPlanets[i]));
 			}
-			drawObjectColor(&sphereModel, darkPlanetModelMatrix, glm::vec3(0.0f, 0.0f, 0.0f));
+			drawObjectColor(&sphereModel, darkPlanetModelMatrix, glm::vec3(1.0f, 1.0f, 1.0f));
 		}
 		for (int i = 0; i < shoots.size(); i++)
 		{	
@@ -657,7 +656,6 @@ void renderScene()
 			glm::vec3(0.0f, 1.0f, 0.0f));
 
 		drawObjectDepth(&sphereModel, planetModelMatrix, lightProjection, lightView);
-		drawObjectDepth(&renderModel, renderTarget, lightProjection, lightView);
 		for (int i = 0; i < spaceships.size(); i++)
 		{
 			drawObjectDepth(&shipModel, spaceships[i].shipDepthModel, lightProjection, lightView);
@@ -670,7 +668,6 @@ void renderScene()
 		drawObjectTextureNormal(&sphereModel, planetModelMatrix, textureEarth, textureEarthNormal);
 
 		drawObjectShadow(&sphereModel, planetModelMatrix, lightProjection, lightView, textureEarth, depthTexture);
-		drawObjectShadow(&renderModel, renderTarget, lightProjection, lightView, textureAsteroid, depthTexture);
 
 		//planets with reflexes (from old code)
 		for (int i = 0; i < 3; i++)
@@ -698,7 +695,6 @@ void init()
 	sphereModel = obj::loadModelFromFile("models/sphere.obj");
 	shipModel = obj::loadModelFromFile("models/spaceship.obj");
 	textureAsteroid = Core::LoadTexture("textures/asteroid2.png");
-	renderModel = obj::loadModelFromFile("models/render.obj");
 	coinModel = obj::loadModelFromFile("models/coin.obj");
 	textureEarth = Core::LoadTexture("textures/earth.png");
 	textureEarthNormal = Core::LoadTexture("textures/earth_normalmap.png");
