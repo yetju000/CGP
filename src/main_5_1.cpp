@@ -604,7 +604,7 @@ void renderScene()
 	{
 		glm::mat4 shipModelMatrix = glm::translate(spaceships[i].pos) * rotations[pointCounter % 220] * glm::scale(glm::vec3(0.10f));
 		spaceships[i].shipDepthModel = shipModelMatrix;
-		drawObjectColor(&shipModel, shipModelMatrix, glm::vec3(0.4f, 0.0f, 0.4f))
+		drawObjectColor(&shipModel, shipModelMatrix, glm::vec3(0.4f, 0.0f, 0.4f));
 
 
 		glm::vec3 v1, v2, v3;
