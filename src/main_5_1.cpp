@@ -559,7 +559,7 @@ void renderScene()
 	// Macierz statku "przyczepia" go do kamery. Warto przeanalizowac te linijke i zrozumiec jak to dziala.
 	glm::mat4 mainShipModelMatrix = glm::translate(cameraPos + cameraDir * 0.5f + glm::vec3(5, 4.6, 4.7)) * glm::rotate(-cameraAngle + glm::radians(180.0f), glm::vec3(0, 1, 0)) * glm::scale(glm::vec3(0.25f));
 	glm::vec3 mainShipPosition = mainShipModelMatrix[3];
-	ship_pos = glm::vec3(circle_points[pointCounter % 220].x, circle_points[pointCounter % 220].y, circle_points[pointCounter % 220].z);
+	ship_pos = glm::vec3(((circle_points[pointCounter % 220].x/2)), (circle_points[pointCounter % 220].y), (circle_points[pointCounter % 220].z*2));
 	glm::mat4 shipModelMatrix = glm::translate(glm::vec3(ship_pos.x, ship_pos.y, ship_pos.z)) * rotations[pointCounter % 220];
 	drawObjectColor(&shipModel, shipModelMatrix, glm::vec3(0.4f, 0.0f, 0.4f));
 	drawObjectColor(&shipModel, mainShipModelMatrix, glm::vec3(0.3f, 0.7f, 0.3f));
@@ -642,7 +642,7 @@ void renderScene()
 		spaceships[i].pos += spaceships[i].vel;
 	}
 	//planets with shadows
-	glm::mat4 planetModelMatrix = glm::translate(glm::vec3(sin(-time), 2.0, cos(-time))) * glm::scale(glm::vec3(3.0));
+	glm::mat4 planetModelMatrix = glm::translate(glm::vec3(sin(-time), 2.0, cos(-time))) * glm::scale(glm::vec3(2.0));
 	glm::vec3 planetPosition = planetModelMatrix[3];
 
 	glm::mat4 renderTarget = glm::translate(glm::vec3(0, -5, 0)) * glm::rotate(-1.56f, glm::vec3(1, 0, 0)) * glm::rotate(1.56f, glm::vec3(0, 1, 0)) * glm::scale(glm::vec3(7, 14, 14));
