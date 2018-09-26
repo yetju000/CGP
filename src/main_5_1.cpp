@@ -165,11 +165,13 @@ void mouseMove(int x, int y)
 	{
 		yaw += sen;
 		cameraAngleX += sen;
+		cameraAngle += sen;		
 	}
 	else if (x + margin < oldX)
 	{
 		yaw -= sen;
 		cameraAngleX -= sen;
+		cameraAngle -= sen;
 	}
 
 	if (y - margin > oldY)
