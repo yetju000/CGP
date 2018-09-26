@@ -67,12 +67,12 @@ glm::vec3 lightDir = glm::normalize(glm::vec3(1.0f, -0.9f, -1.0f));
 
 bool state = true;
 
-glm::vec3 circle_points[220]; //wektor punktów do naszej krzywej
-glm::mat4 rotations[220]; //macierz rotacji BNT - wzd³u¿ krzywej
+glm::vec3 circle_points[220]; //wektor punktÃ³w do naszej krzywej
+glm::mat4 rotations[220]; //macierz rotacji BNT - wzdÂ³uÂ¿ krzywej
 int pointCounter = 0;
 glm::vec3 ship_pos;
 
-//nasze piêkne cz¹steczki
+//nasze piÃªkne czÂ¹steczki
 struct Particle {
 	glm::vec3 pos;
 	glm::quat rot;
@@ -192,14 +192,14 @@ void keyboard(unsigned char key, int x, int y)
 	float angleSpeed = 0.1f;
 	float moveSpeed = 0.1f;
 	float moveSpeedUpDown = 0.3f;
-	switch(key)
+	switch (key)
 	{
 	case 'z': cameraAngle -= angleSpeed; break;
 	case 'x': cameraAngle += angleSpeed; break;
 	case 'w': cameraPos += cameraDir * moveSpeed; break;
 	case 's': cameraPos -= cameraDir * moveSpeed; break;
-	case 'd': cameraPos += glm::cross(cameraDir, glm::vec3(0,1,0)) * moveSpeed; break;
-	case 'a': cameraPos -= glm::cross(cameraDir, glm::vec3(0,1,0)) * moveSpeed; break;
+	case 'd': cameraPos += glm::cross(cameraDir, glm::vec3(0, 1, 0)) * moveSpeed; break;
+	case 'a': cameraPos -= glm::cross(cameraDir, glm::vec3(0, 1, 0)) * moveSpeed; break;
 	case 'c': cameraPos += glm::cross(cameraDir, glm::vec3(1, 0, 0)) * moveSpeedUpDown; break;
 	case 'v': cameraPos -= glm::cross(cameraDir, glm::vec3(1, 0, 0)) * moveSpeedUpDown; break;
 	case 'f': bullets++; break;
@@ -326,7 +326,7 @@ void drawObjectTextureNormal(obj::Model * model, glm::mat4 modelMatrix, GLuint t
 	glUseProgram(0);
 }
 
-void drawSkybox(GLuint cubemapID) 
+void drawSkybox(GLuint cubemapID)
 {
 	GLuint program = programSkybox;
 
@@ -345,7 +345,7 @@ void drawSkybox(GLuint cubemapID)
 	glUseProgram(0);
 }
 
-//wyznaczenie punktów na okrêgu
+//wyznaczenie punktÃ³w na okrÃªgu
 void drawCircle(GLfloat x, GLfloat y, GLfloat z, GLfloat radius, GLint numberOfSides)
 {
 	GLint numberOfVertices = numberOfSides + 1;
@@ -371,7 +371,7 @@ void drawCircle(GLfloat x, GLfloat y, GLfloat z, GLfloat radius, GLint numberOfS
 	}
 }
 
-//wyznaczenie wektorów BNT
+//wyznaczenie wektorÃ³w BNT
 void parallel_transport() {
 	glm::vec3 tangent[220];
 	glm::vec3 normal[220];
@@ -393,8 +393,8 @@ void parallel_transport() {
 			normal[i + 1] = normal[i];
 		else {
 			B = (B / glm::length(B));
-			float theta = acosf(glm::dot(tangent[i],tangent[i+1]));
-			normal[i + 1] =  glm::vec4(normal[i], 0.0f) * glm::rotate(theta, B);
+			float theta = acosf(glm::dot(tangent[i], tangent[i + 1]));
+			normal[i + 1] = glm::vec4(normal[i], 0.0f) * glm::rotate(theta, B);
 		}
 		binormal[i] = glm::cross(tangent[i], normal[i]);
 		binormal[i] = glm::normalize(binormal[i]);
@@ -508,31 +508,31 @@ void renderScene()
 {
 
 
-		float time = glutGet(GLUT_ELAPSED_TIME) / 1000.0f;
-		// Aktualizacja macierzy widoku i rzutowania. Macierze sa przechowywane w zmiennych globalnych, bo uzywa ich funkcja drawObject.
-		// (Bardziej elegancko byloby przekazac je jako argumenty do funkcji, ale robimy tak dla uproszczenia kodu.
-		//  Jest to mozliwe dzieki temu, ze macierze widoku i rzutowania sa takie same dla wszystkich obiektow!)
-		cameraMatrix = createCameraMatrix();
-		perspectiveMatrix = Core::createPerspectiveMatrix();
+	float time = glutGet(GLUT_ELAPSED_TIME) / 1000.0f;
+	// Aktualizacja macierzy widoku i rzutowania. Macierze sa przechowywane w zmiennych globalnych, bo uzywa ich funkcja drawObject.
+	// (Bardziej elegancko byloby przekazac je jako argumenty do funkcji, ale robimy tak dla uproszczenia kodu.
+	//  Jest to mozliwe dzieki temu, ze macierze widoku i rzutowania sa takie same dla wszystkich obiektow!)
+	cameraMatrix = createCameraMatrix();
+	perspectiveMatrix = Core::createPerspectiveMatrix();
 
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		glClearColor(0.0f, 0.3f, 0.3f, 1.0f);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	glClearColor(0.0f, 0.3f, 0.3f, 1.0f);
 
-		glColor3d(0.0, 0.0, 0.0);
-		setOrthographicProjection();
-		glPushMatrix();
-		glLoadIdentity();
-		//renderBitmapString(100, 100, (void *)font, "darkPlanets: ");
-		std::stringstream ss;
-		std::stringstream sss;
-		if (darkPlanets.size() > 0 && ammo == 0) {
-			ss << "You lost";
-			std::string s = ss.str();
-			const char * c = s.c_str();
-			renderBitmapString(500, 500, (void *)font, c);
-		}
-		else if (darkPlanets.size() > 0){
-		ss << "White planets: " << 10-darkPlanets.size() << "/" << 10;
+	glColor3d(0.0, 0.0, 0.0);
+	setOrthographicProjection();
+	glPushMatrix();
+	glLoadIdentity();
+	//renderBitmapString(100, 100, (void *)font, "darkPlanets: ");
+	std::stringstream ss;
+	std::stringstream sss;
+	if (darkPlanets.size() > 0 && ammo == 0) {
+		ss << "You lost";
+		std::string s = ss.str();
+		const char * c = s.c_str();
+		renderBitmapString(500, 500, (void *)font, c);
+	}
+	else if (darkPlanets.size() > 0) {
+		ss << "Dark planets shot down: " << 10 - darkPlanets.size() << "/" << 10;
 		std::string s = ss.str();
 		const char * c = s.c_str();
 		renderBitmapString(100, 100, (void *)font, c);
@@ -540,142 +540,140 @@ void renderScene()
 		s = sss.str();
 		c = s.c_str();
 		renderBitmapString(100, 130, (void *)font, c);
+	}
+	else {
+		ss << "You won!";
+		std::string s = ss.str();
+		const char * c = s.c_str();
+		renderBitmapString(500, 500, (void *)font, c);
+	}
+	glPopMatrix();
+	resetPerspectiveProjection();
+
+
+
+
+
+	// Macierz statku "przyczepia" go do kamery. Warto przeanalizowac te linijke i zrozumiec jak to dziala.
+	glm::mat4 mainShipModelMatrix = glm::translate(cameraPos + cameraDir * 0.5f + glm::vec3(5, 4.6, 4.7)) * glm::rotate(-cameraAngle + glm::radians(180.0f), glm::vec3(0, 1, 0)) * glm::scale(glm::vec3(0.25f));
+	glm::vec3 mainShipPosition = mainShipModelMatrix[3];
+	ship_pos = glm::vec3(circle_points[pointCounter % 220].x, circle_points[pointCounter % 220].y, circle_points[pointCounter % 220].z);
+	glm::mat4 shipModelMatrix = glm::translate(glm::vec3(ship_pos.x, ship_pos.y, ship_pos.z)) * rotations[pointCounter % 220];
+	drawObjectColor(&shipModel, shipModelMatrix, glm::vec3(0.4f, 0.0f, 0.4f));
+	drawObjectColor(&shipModel, mainShipModelMatrix, glm::vec3(0.3f, 0.7f, 0.3f));
+
+
+	pointCounter++;
+	//Sleep(50);
+
+	//darkplanets
+	for (int i = 0; i < darkPlanets.size(); i++)
+	{
+		glm::mat4 darkPlanetModelMatrix = glm::translate(darkPlanets[i]) * createRotationMatrix(time / 2) * glm::translate(glm::vec3(0, 0, 0)) * glm::scale(glm::vec3(0.50f));
+		for (int j = 0; j < shoots.size(); j++) {
+			glm::vec3 bulletPosition = shoots[j][3];
+			float d = find_distance(darkPlanets[i], bulletPosition + glm::vec3(0, 0, 0));
+			if (d < 1)
+				darkPlanets.erase(std::find(darkPlanets.begin(), darkPlanets.end(), darkPlanets[i]));
 		}
-		else {
-			ss << "You won!";
-			std::string s = ss.str();
-			const char * c = s.c_str();
-			renderBitmapString(500, 500, (void *)font, c);
-		}
-		glPopMatrix();
-		resetPerspectiveProjection();
+		drawObjectColor(&sphereModel, darkPlanetModelMatrix, glm::vec3(0.2f, 0.0f, 0.2f));
+	}
+	for (int i = 0; i < shoots.size(); i++)
+	{
+		shoots[i] = shoots[i] * glm::translate(glm::vec3(0, 0, 10.0f));
+		float d = find_distance(shoots[i][3], mainShipPosition + glm::vec3(0, -2.5, 0));
+		if (d > 20)
+			shoots.erase(std::find(shoots.begin(), shoots.end(), shoots[i]));
+		else
+			drawObjectColor(&sphereModel, shoots[i], glm::vec3(1.0f, 1.0f, 1.0f));
+	}
 
-		
-
-
-
-		// Macierz statku "przyczepia" go do kamery. Warto przeanalizowac te linijke i zrozumiec jak to dziala.
-		glm::mat4 mainShipModelMatrix = glm::translate(cameraPos + cameraDir * 0.5f + glm::vec3(5, 4.6, 4.7)) * glm::rotate(-cameraAngle + glm::radians(180.0f), glm::vec3(0, 1, 0)) * glm::scale(glm::vec3(0.25f));
-		glm::vec3 mainShipPosition = mainShipModelMatrix[3];
-		ship_pos = glm::vec3(circle_points[pointCounter % 220].x, circle_points[pointCounter % 220].y, circle_points[pointCounter % 220].z);
-		glm::mat4 shipModelMatrix = glm::translate(glm::vec3(ship_pos.x, ship_pos.y, ship_pos.z)) * rotations[pointCounter % 220];
-		drawObjectColor(&shipModel, shipModelMatrix, glm::vec3(0.7f, 0.0f, 0.0f));
-		drawObjectColor(&shipModel, mainShipModelMatrix, glm::vec3(0.7f, 0.7f, 0.7f));
-
-		
-		pointCounter++;
-		//Sleep(50);
-
-		//dodanie naszych monetek
-		for (int i = 0; i < darkPlanets.size(); i++)
-		{
-			glm::mat4 darkPlanetModelMatrix = glm::translate(darkPlanets[i]) * createRotationMatrix(time / 2) * glm::translate(glm::vec3(0, 0, 0)) * glm::scale(glm::vec3(0.50f));
-			for (int j = 0; j < shoots.size(); j++) {
-				glm::vec3 bulletPosition = shoots[j][3];
-				float d = find_distance(darkPlanets[i], bulletPosition + glm::vec3(0, 0, 0));
-				if (d < 1)
-					darkPlanets.erase(std::find(darkPlanets.begin(), darkPlanets.end(), darkPlanets[i]));
-			}
-			drawObjectColor(&sphereModel, darkPlanetModelMatrix, glm::vec3(1.0f, 1.0f, 1.0f));
-		}
-		for (int i = 0; i < shoots.size(); i++)
-		{	
-			shoots[i] = shoots[i] * glm::translate(glm::vec3(0, 0, 10.0f));
-			//glm::mat4 coinModelMatrix = glm::translate(shoots[i]) * glm::translate(glm::vec3(0, 0, 0)) * glm::scale(glm::vec3(0.001f));
-			float d = find_distance(shoots[i][3], mainShipPosition + glm::vec3(0, -2.5, 0));
-			if (d > 20)
-				shoots.erase(std::find(shoots.begin(), shoots.end(), shoots[i]));
-			else
-				drawObjectColor(&sphereModel, shoots[i], glm::vec3(1.0f, 1.0f, 1.0f));
-		}
-
-		if (bullets > 0) {
-			//mainShipPosition.x += 0.10;
-			if (ammo>0){
+	if (bullets > 0) {
+		if (ammo > 0) {
 			glm::mat4 position = glm::translate(mainShipPosition) * glm::rotate(-cameraAngle + glm::radians(180.0f), glm::vec3(0, 1, 0)) * glm::scale(glm::vec3(0.05f));
 			shoots.push_back(position);
 			ammo--;
-			}
-			bullets--;
 		}
+		bullets--;
+	}
 
-		//przemieszczanie stateczków
-		for (int i = 0; i < spaceships.size(); i++)
-		{
-			glm::mat4 shipModelMatrix = glm::translate(spaceships[i].pos) * rotations[pointCounter % 220] * glm::scale(glm::vec3(0.10f));
-			spaceships[i].shipDepthModel = shipModelMatrix;
-			drawObjectColor(&shipModel, shipModelMatrix, glm::vec3(0.0f, 0.0f, 0.7f));
+	//przemieszczanie stateczkÃ³w
+	for (int i = 0; i < spaceships.size(); i++)
+	{
+		glm::mat4 shipModelMatrix = glm::translate(spaceships[i].pos) * rotations[pointCounter % 220] * glm::scale(glm::vec3(0.10f));
+		spaceships[i].shipDepthModel = shipModelMatrix;
+		drawObjectColor(&shipModel, shipModelMatrix, glm::vec3(0.4f, 0.0f, 0.4f));
 
 
-			glm::vec3 v1, v2, v3;
-			float m1 = 5;
-			float m2 = 3;
-			float m3 = 0.05;
-			//v1 = rule1: centre_of_mass = ship_pos;
-			v1 = glm::normalize(ship_pos - spaceships[i].pos);
-			v1 = m1 * v1;
-			//v2 = rule2: keep a distance away from other objects
-			if (glm::length(ship_pos - spaceships[i].pos) < 2.5)
-				spaceships[i].pos -= (ship_pos - spaceships[i].pos);
-			for (int j = 0; j < spaceships.size(); j++) {
-				v2 = glm::vec3(0, 0, 0);
-				if (j != i) //boid which is near by
-					if (glm::length(spaceships[j].pos - spaceships[i].pos) < 2)
-						v2 -= (spaceships[j].pos - spaceships[i].pos);
-			}
-			v2 = m2 * v2;
-			//v3 = rule3: match velocity with near boids
-			for (int j = 0; j < spaceships.size(); j++) {
-				if (j != i)
-					v3 += spaceships[j].vel;
-			}
-			v3 = v3 / (spaceships.size() - 1);
-			v3 = (v3 - spaceships[i].vel) / 8;
-			v3 = m3 * v3;
-
-			spaceships[i].vel += v1 + v2 + v3;
-			//limiting the speed
-			int vlim = 1;
-			if (glm::length(spaceships[i].vel) > vlim)
-				spaceships[i].vel = (spaceships[i].vel / glm::length(spaceships[i].vel)) * vlim;
-
-			spaceships[i].pos += spaceships[i].vel;
+		glm::vec3 v1, v2, v3;
+		float m1 = 5;
+		float m2 = 3;
+		float m3 = 0.05;
+		//v1 = rule1: centre_of_mass = ship_pos;
+		v1 = glm::normalize(ship_pos - spaceships[i].pos);
+		v1 = m1 * v1;
+		//v2 = rule2: keep a distance away from other objects
+		if (glm::length(ship_pos - spaceships[i].pos) < 2.5)
+			spaceships[i].pos -= (ship_pos - spaceships[i].pos);
+		for (int j = 0; j < spaceships.size(); j++) {
+			v2 = glm::vec3(0, 0, 0);
+			if (j != i) //boid which is near by
+				if (glm::length(spaceships[j].pos - spaceships[i].pos) < 2)
+					v2 -= (spaceships[j].pos - spaceships[i].pos);
 		}
-		//planets with shadows
-		glm::mat4 planetModelMatrix = glm::translate(glm::vec3(sin(-time), 2.0, cos(-time))) * glm::scale(glm::vec3(3.0));
-		glm::vec3 planetPosition = planetModelMatrix[3];
-
-		glm::mat4 renderTarget = glm::translate(glm::vec3(0, -5, 0)) * glm::rotate(-1.56f, glm::vec3(1, 0, 0)) * glm::rotate(1.56f, glm::vec3(0, 1, 0)) * glm::scale(glm::vec3(7, 14, 14));
-
-		glBindFramebuffer(GL_FRAMEBUFFER, FramebufferObject);
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-		lightProjection = glm::ortho(-30.0f, 30.0f, -30.0f, 30.0f, -30.0f, 30.0f);
-		lightView = glm::lookAt(-lightDir,
-			glm::vec3(0.0f, 0.0f, 0.0f),
-			glm::vec3(0.0f, 1.0f, 0.0f));
-
-		drawObjectDepth(&sphereModel, planetModelMatrix, lightProjection, lightView);
-		for (int i = 0; i < spaceships.size(); i++)
-		{
-			drawObjectDepth(&shipModel, spaceships[i].shipDepthModel, lightProjection, lightView);
+		v2 = m2 * v2;
+		//v3 = rule3: match velocity with near boids
+		for (int j = 0; j < spaceships.size(); j++) {
+			if (j != i)
+				v3 += spaceships[j].vel;
 		}
-		drawObjectDepth(&shipModel, shipModelMatrix, lightProjection, lightView);
+		v3 = v3 / (spaceships.size() - 1);
+		v3 = (v3 - spaceships[i].vel) / 8;
+		v3 = m3 * v3;
 
-		glBindFramebuffer(GL_FRAMEBUFFER, 0);
+		spaceships[i].vel += v1 + v2 + v3;
+		//limiting the speed
+		int vlim = 1;
+		if (glm::length(spaceships[i].vel) > vlim)
+			spaceships[i].vel = (spaceships[i].vel / glm::length(spaceships[i].vel)) * vlim;
 
-		//planet with normal mapping
-		drawObjectTextureNormal(&sphereModel, planetModelMatrix, textureEarth, textureEarthNormal);
+		spaceships[i].pos += spaceships[i].vel;
+	}
+	//planets with shadows
+	glm::mat4 planetModelMatrix = glm::translate(glm::vec3(sin(-time), 2.0, cos(-time))) * glm::scale(glm::vec3(3.0));
+	glm::vec3 planetPosition = planetModelMatrix[3];
 
-		drawObjectShadow(&sphereModel, planetModelMatrix, lightProjection, lightView, textureEarth, depthTexture);
+	glm::mat4 renderTarget = glm::translate(glm::vec3(0, -5, 0)) * glm::rotate(-1.56f, glm::vec3(1, 0, 0)) * glm::rotate(1.56f, glm::vec3(0, 1, 0)) * glm::scale(glm::vec3(7, 14, 14));
 
-		//planets with reflexes (from old code)
-		for (int i = 0; i < 3; i++)
-		{
-			glm::mat4 planetModelMatrix = glm::translate(glm::vec3(planets[i])) * glm::scale(glm::vec3(planets[i].w));
-			drawObjectTexture(&sphereModel, planetModelMatrix, cubeMapID);
-		}
-		drawSkybox(cubeMapID);
+	glBindFramebuffer(GL_FRAMEBUFFER, FramebufferObject);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+	lightProjection = glm::ortho(-30.0f, 30.0f, -30.0f, 30.0f, -30.0f, 30.0f);
+	lightView = glm::lookAt(-lightDir,
+		glm::vec3(0.0f, 0.0f, 0.0f),
+		glm::vec3(0.0f, 1.0f, 0.0f));
+
+	drawObjectDepth(&sphereModel, planetModelMatrix, lightProjection, lightView);
+	for (int i = 0; i < spaceships.size(); i++)
+	{
+		drawObjectDepth(&shipModel, spaceships[i].shipDepthModel, lightProjection, lightView);
+	}
+	drawObjectDepth(&shipModel, shipModelMatrix, lightProjection, lightView);
+
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+	//planet with normal mapping
+	drawObjectTextureNormal(&sphereModel, planetModelMatrix, textureEarth, textureEarthNormal);
+
+	drawObjectShadow(&sphereModel, planetModelMatrix, lightProjection, lightView, textureEarth, depthTexture);
+
+	//planets with reflexes (from old code)
+	for (int i = 0; i < 3; i++)
+	{
+		glm::mat4 planetModelMatrix = glm::translate(glm::vec3(planets[i])) * glm::scale(glm::vec3(planets[i].w));
+		drawObjectTexture(&sphereModel, planetModelMatrix, cubeMapID);
+	}
+	drawSkybox(cubeMapID);
 
 
 	glutSwapBuffers();
@@ -751,7 +749,7 @@ void init()
 		darkPlanets.push_back(position);
 	}
 
-	
+
 
 	drawCircle(0, 3, 0, 5, 219);
 	parallel_transport();
@@ -818,5 +816,3 @@ int main(int argc, char ** argv)
 	return 0;
 
 }
-
-
