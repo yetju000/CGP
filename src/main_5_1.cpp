@@ -67,12 +67,12 @@ glm::vec3 lightDir = glm::normalize(glm::vec3(1.0f, -0.9f, -1.0f));
 
 bool state = true;
 
-glm::vec3 circle_points[220]; //wektor punktów do naszej krzywej
-glm::mat4 rotations[220]; //macierz rotacji BNT - wzd³u¿ krzywej
+glm::vec3 circle_points[220]; //wektor punktÃ³w do naszej krzywej
+glm::mat4 rotations[220]; //macierz rotacji BNT - wzdÂ³uÂ¿ krzywej
 int pointCounter = 0;
 glm::vec3 ship_pos;
 
-//nasze piêkne cz¹steczki
+//nasze piÃªkne czÂ¹steczki
 struct Particle {
 	glm::vec3 pos;
 	glm::quat rot;
@@ -347,7 +347,7 @@ void drawSkybox(GLuint cubemapID)
 	glUseProgram(0);
 }
 
-//wyznaczenie punktów na okrêgu
+//wyznaczenie punktÃ³w na okrÃªgu
 void drawCircle(GLfloat x, GLfloat y, GLfloat z, GLfloat radius, GLint numberOfSides)
 {
 	GLint numberOfVertices = numberOfSides + 1;
@@ -373,7 +373,7 @@ void drawCircle(GLfloat x, GLfloat y, GLfloat z, GLfloat radius, GLint numberOfS
 	}
 }
 
-//wyznaczenie wektorów BNT
+//wyznaczenie wektorÃ³w BNT
 void parallel_transport() {
 	glm::vec3 tangent[220];
 	glm::vec3 normal[220];
@@ -534,7 +534,7 @@ void renderScene()
 		renderBitmapString(500, 500, (void *)font, c);
 	}
 	else if (darkPlanets.size() > 0) {
-		ss << "White planets: " << 10 - darkPlanets.size() << "/" << 10;
+		ss << "Dark planets shot down: " << 10 - darkPlanets.size() << "/" << 10;
 		std::string s = ss.str();
 		const char * c = s.c_str();
 		renderBitmapString(100, 100, (void *)font, c);
@@ -561,13 +561,14 @@ void renderScene()
 	glm::vec3 mainShipPosition = mainShipModelMatrix[3];
 	ship_pos = glm::vec3(circle_points[pointCounter % 220].x, circle_points[pointCounter % 220].y, circle_points[pointCounter % 220].z);
 	glm::mat4 shipModelMatrix = glm::translate(glm::vec3(ship_pos.x, ship_pos.y, ship_pos.z)) * rotations[pointCounter % 220];
-	drawObjectColor(&shipModel, shipModelMatrix, glm::vec3(0.7f, 0.0f, 0.0f));
-	drawObjectColor(&shipModel, mainShipModelMatrix, glm::vec3(0.7f, 0.7f, 0.7f));
+	drawObjectColor(&shipModel, shipModelMatrix, glm::vec3(0.4f, 0.0f, 0.4f));
+	drawObjectColor(&shipModel, mainShipModelMatrix, glm::vec3(0.3f, 0.7f, 0.3f));
 
 
 	pointCounter++;
 	//Sleep(50);
 
+	//darkplanets
 	for (int i = 0; i < darkPlanets.size(); i++)
 	{
 		glm::mat4 darkPlanetModelMatrix = glm::translate(darkPlanets[i]) * createRotationMatrix(time / 2) * glm::translate(glm::vec3(0, 0, 0)) * glm::scale(glm::vec3(0.50f));
@@ -577,12 +578,11 @@ void renderScene()
 			if (d < 1)
 				darkPlanets.erase(std::find(darkPlanets.begin(), darkPlanets.end(), darkPlanets[i]));
 		}
-		drawObjectColor(&sphereModel, darkPlanetModelMatrix, glm::vec3(1.0f, 1.0f, 1.0f));
+		drawObjectColor(&sphereModel, darkPlanetModelMatrix, glm::vec3(0.2f, 0.0f, 0.2f));
 	}
 	for (int i = 0; i < shoots.size(); i++)
 	{
 		shoots[i] = shoots[i] * glm::translate(glm::vec3(0, 0, 10.0f));
-		//glm::mat4 coinModelMatrix = glm::translate(shoots[i]) * glm::translate(glm::vec3(0, 0, 0)) * glm::scale(glm::vec3(0.001f));
 		float d = find_distance(shoots[i][3], mainShipPosition + glm::vec3(0, -2.5, 0));
 		if (d > 20)
 			shoots.erase(std::find(shoots.begin(), shoots.end(), shoots[i]));
@@ -591,7 +591,6 @@ void renderScene()
 	}
 
 	if (bullets > 0) {
-		//mainShipPosition.x += 0.10;
 		if (ammo > 0) {
 			glm::mat4 position = glm::translate(mainShipPosition) * glm::rotate(-cameraAngle + glm::radians(180.0f), glm::vec3(0, 1, 0)) * glm::scale(glm::vec3(0.05f));
 			shoots.push_back(position);
@@ -600,12 +599,12 @@ void renderScene()
 		bullets--;
 	}
 
-	//przemieszczanie stateczków
+	//przemieszczanie stateczkÃ³w
 	for (int i = 0; i < spaceships.size(); i++)
 	{
 		glm::mat4 shipModelMatrix = glm::translate(spaceships[i].pos) * rotations[pointCounter % 220] * glm::scale(glm::vec3(0.10f));
 		spaceships[i].shipDepthModel = shipModelMatrix;
-		drawObjectColor(&shipModel, shipModelMatrix, glm::vec3(0.0f, 0.0f, 0.7f));
+		drawObjectColor(&shipModel, shipModelMatrix, glm::vec3(0.4f, 0.0f, 0.4f))
 
 
 		glm::vec3 v1, v2, v3;
@@ -819,5 +818,3 @@ int main(int argc, char ** argv)
 	return 0;
 
 }
-
-
